@@ -1,22 +1,47 @@
 const express = require("express");
 const router = express.Router();
+const supabase = require("../config/supabase");
 
-let farmRecords = []; // temp in-memory storage
+router.get("/", async (req, res) => {
+  const { data, error } = await supabase
+    .from("farm_records")
+    .select("*")
+    .order("created_at", { ascending: false });
 
-// GET all records
-router.get("/", (req, res) => {
-  res.json(farmRecords);
+  if (error) {
+    console.log("GET ERROR:", error);
+    return res.status(500).json({ message: error.message });
+  }
+
+  res.json(data);
 });
 
-// POST new record
-router.post("/", (req, res) => {
-  const newRecord = {
-    id: Date.now(),
-    ...req.body,
-  };
+router.post("/", async (req, res) => {
+  console.log("BODY RECEIVED:", req.body);
 
-  farmRecords.unshift(newRecord);
-  res.json(newRecord);
+  const { cropName, landSize, season, expense, expectedYield } = req.body;
+
+  const { data, error } = await supabase
+    .from("farm_records")
+    .insert([
+      {
+        crop_name: cropName,
+        land_size: landSize,
+        season: season,
+        expense: expense,
+        expected_yield: expectedYield,
+      },
+    ])
+    .select()
+    .single();
+
+  if (error) {
+    console.log("POST ERROR:", error);
+    return res.status(500).json({ message: error.message });
+  }
+
+  console.log("SAVED DATA:", data);
+  res.json(data);
 });
 
 module.exports = router;

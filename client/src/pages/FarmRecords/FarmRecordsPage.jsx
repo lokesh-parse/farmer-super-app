@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import PageHeader from "../../components/common/PageHeader";
-// Added Service Imports
 import { getFarmRecords, addFarmRecord } from "../../services/farmService";
 
 function FarmRecordsPage() {
@@ -14,18 +13,13 @@ function FarmRecordsPage() {
 
   const [records, setRecords] = useState([]);
 
-  // Updated useEffect to fetch data from the service
   useEffect(() => {
-    async function loadData() {
-      try {
-        const data = await getFarmRecords();
-        setRecords(data);
-      } catch (error) {
-        console.error("Failed to fetch records:", error);
-      }
+    async function loadRecords() {
+      const data = await getFarmRecords();
+      setRecords(data);
     }
 
-    loadData();
+    loadRecords();
   }, []);
 
   const handleChange = (e) => {
@@ -35,27 +29,20 @@ function FarmRecordsPage() {
     }));
   };
 
-  // Updated handleSubmit to use the service
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const newRecord = await addFarmRecord(formData);
+    const newRecord = await addFarmRecord(formData);
 
-      // Update state with the record returned from the server
-      setRecords((prev) => [newRecord, ...prev]);
+    setRecords((prev) => [newRecord, ...prev]);
 
-      // Clear Form
-      setFormData({
-        cropName: "",
-        landSize: "",
-        season: "",
-        expense: "",
-        expectedYield: "",
-      });
-    } catch (error) {
-      console.error("Failed to save record:", error);
-    }
+    setFormData({
+      cropName: "",
+      landSize: "",
+      season: "",
+      expense: "",
+      expectedYield: "",
+    });
   };
 
   return (
@@ -76,7 +63,6 @@ function FarmRecordsPage() {
               placeholder="Crop Name"
               value={formData.cropName}
               onChange={handleChange}
-              required
             />
 
             <input
@@ -121,12 +107,12 @@ function FarmRecordsPage() {
           <div className="farm-record-list">
             {records.length > 0 ? (
               records.map((record) => (
-                <div key={record.id || record._id} className="farm-record-item">
-                  <h3>{record.cropName}</h3>
-                  <p><strong>Land:</strong> {record.landSize}</p>
+                <div key={record.id} className="farm-record-item">
+                  <h3>{record.crop_name || record.cropName}</h3>
+                  <p><strong>Land:</strong> {record.land_size || record.landSize}</p>
                   <p><strong>Season:</strong> {record.season}</p>
                   <p><strong>Expense:</strong> {record.expense}</p>
-                  <p><strong>Expected Yield:</strong> {record.expectedYield}</p>
+                  <p><strong>Expected Yield:</strong> {record.expected_yield || record.expectedYield}</p>
                 </div>
               ))
             ) : (
