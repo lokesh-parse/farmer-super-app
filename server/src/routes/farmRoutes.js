@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const supabase = require("../config/supabase");
 
+// GET all farm records
 router.get("/", async (req, res) => {
   const { data, error } = await supabase
     .from("farm_records")
@@ -16,6 +17,7 @@ router.get("/", async (req, res) => {
   res.json(data);
 });
 
+// POST a new farm record
 router.post("/", async (req, res) => {
   console.log("BODY RECEIVED:", req.body);
 
@@ -42,6 +44,28 @@ router.post("/", async (req, res) => {
 
   console.log("SAVED DATA:", data);
   res.json(data);
+});
+
+// DELETE farm record
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  const { error } = await supabase
+    .from("farm_records")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+
+  res.json({
+    success: true,
+    message: "Record deleted successfully",
+  });
 });
 
 module.exports = router;
