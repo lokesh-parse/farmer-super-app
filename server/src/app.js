@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const routes = require("./routes");
 const farmRoutes = require("./routes/farmRoutes");
+const cropDiseaseRoutes = require("./routes/cropDiseaseRoutes");
 
 const app = express();
 
@@ -15,5 +16,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api", routes);
+app.use("/api/crop-disease", cropDiseaseRoutes);
 
 module.exports = app;

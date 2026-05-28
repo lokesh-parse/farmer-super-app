@@ -46,6 +46,34 @@ router.post("/", async (req, res) => {
   res.json(data);
 });
 
+// PUT update farm record
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const { cropName, landSize, season, expense, expectedYield } = req.body;
+
+  const { data, error } = await supabase
+    .from("farm_records")
+    .update({
+      crop_name: cropName,
+      land_size: landSize,
+      season,
+      expense,
+      expected_yield: expectedYield,
+    })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+
+  res.json(data);
+});
+
 // DELETE farm record
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;

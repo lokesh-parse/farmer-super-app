@@ -12,6 +12,9 @@ import {
   removeNotification,
 } from "../../utils/notifications";
 
+// Step 1: Farm service import
+import { getFarmRecords } from "../../services/farmService";
+
 function DashboardPage() {
   const navigate = useNavigate();
 
@@ -20,6 +23,9 @@ function DashboardPage() {
   const selectedLanguage = getLanguage(); 
 
   const [notifications, setNotifications] = useState([]);
+  
+  // Step 2: Component ke andar state add
+  const [farmRecords, setFarmRecords] = useState([]);
 
   useEffect(() => {
     const saved = getNotifications();
@@ -50,12 +56,21 @@ function DashboardPage() {
     }
   }, []);
 
+  // Step 3: useEffect add kiya for fetching records
+  useEffect(() => {
+    async function loadFarmRecords() {
+      const data = await getFarmRecords();
+      setFarmRecords(data);
+    }
+
+    loadFarmRecords();
+  }, []);
+
   const handleRemove = (id) => {
     removeNotification(id);
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   };
 
-  const farmRecords = JSON.parse(localStorage.getItem("farmRecords")) || [];
   const communityPosts = JSON.parse(localStorage.getItem("communityPosts")) || [];
 
   const totalActivities = history.length;
@@ -66,6 +81,19 @@ function DashboardPage() {
   const lastActivity = history[0];
   const recentHistory = history.slice(0, 4);
 
+  // Step 4: Stats calculate kiye gaye
+  const totalFarmRecords = farmRecords.length;
+
+  const totalFarmExpense = farmRecords.reduce(
+    (sum, record) => sum + Number(record.expense || 0),
+    0
+  );
+
+  const topCrop =
+    farmRecords.length > 0
+      ? farmRecords[0].crop_name || farmRecords[0].cropName
+      : "N/A";
+
   return (
     <div className="dashboard">
       <div className="dashboard-hero">
@@ -74,7 +102,6 @@ function DashboardPage() {
           subtitle="Here is your farming platform overview"
         />
         
-        {/* <-- New Language Display added here --> */}
         <p className="dashboard-language">
           Preferred Language: {selectedLanguage}
         </p>
@@ -90,7 +117,6 @@ function DashboardPage() {
         </div>
       </div>
 
-      {/* <-- New Notifications UI added here --> */}
       <div className="dashboard-alerts">
         <h3>Notifications</h3>
 
@@ -113,7 +139,12 @@ function DashboardPage() {
         <StatCard title="AI Chats" value={chatCount} />
         <StatCard title="Weather Checks" value={weatherCount} />
         <StatCard title="Crop Scans" value={cropCount} />
-        <StatCard title="Farm Records" value={farmRecords.length} />
+        
+        {/* Step 5: Dashboard cards added here */}
+        <StatCard title="Farm Records" value={totalFarmRecords} />
+        <StatCard title="Farm Expense" value={`₹ ${totalFarmExpense}`} />
+        <StatCard title="Top Crop" value={topCrop} />
+        
         <StatCard title="Community Posts" value={communityPosts.length} />
       </div>
 
