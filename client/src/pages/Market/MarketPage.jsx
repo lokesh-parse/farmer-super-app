@@ -1,24 +1,30 @@
-import { useState } from "react";
-import PageHeader from "../../components/common/PageHeader"; // <-- New Import added here
-
-const mockData = [
-  { crop: "Wheat", market: "Nagpur Mandi", price: "₹2200/qtl" },
-  { crop: "Wheat", market: "Delhi Mandi", price: "₹2350/qtl" },
-  { crop: "Rice", market: "Nagpur Mandi", price: "₹1800/qtl" },
-  { crop: "Cotton", market: "Akola Mandi", price: "₹7200/qtl" },
-  { crop: "Tomato", market: "Pune Market", price: "₹900/qtl" },
-];
+import { useEffect, useState } from "react";
+import PageHeader from "../../components/common/PageHeader";
+import { getMarketPrices } from "../../services/marketService";
 
 function MarketPage() {
+  const [marketData, setMarketData] = useState([]);
   const [search, setSearch] = useState("");
 
-  const filtered = mockData.filter((item) =>
+  useEffect(() => {
+    async function loadPrices() {
+      try {
+        const data = await getMarketPrices();
+        setMarketData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    loadPrices();
+  }, []);
+
+  const filtered = marketData.filter((item) =>
     item.crop.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="market-page">
-      {/* Updated Header Component */}
       <PageHeader
         title="Market Prices"
         subtitle="Check latest mandi rates for crops."
@@ -34,11 +40,18 @@ function MarketPage() {
 
       <div className="market-list">
         {filtered.length > 0 ? (
-          filtered.map((item, index) => (
-            <div key={index} className="market-card">
+          filtered.map((item) => (
+            <div key={item.id} className="market-card">
               <h3>{item.crop}</h3>
-              <p><strong>Market:</strong> {item.market}</p>
-              <p><strong>Price:</strong> {item.price}</p>
+              <p>
+                <strong>Market:</strong> {item.market}
+              </p>
+              <p>
+                <strong>State:</strong> {item.state}
+              </p>
+              <p>
+                <strong>Price:</strong> ₹{item.modalPrice}
+              </p>
             </div>
           ))
         ) : (

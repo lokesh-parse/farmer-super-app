@@ -12,6 +12,8 @@ import ProfilePage from "../pages/Profile/ProfilePage";
 import NotFoundPage from "../pages/NotFound/NotFoundPage";
 import AppLayout from "../components/layout/AppLayout";
 import ProtectedRoute from "./ProtectedRoute";
+import NotificationsPage from "../pages/Notifications/NotificationsPage";
+
 
 function AppRoutes() {
   return (
@@ -35,6 +37,8 @@ function AppRoutes() {
         <Route path="market" element={<MarketPage />} /> 
         <Route path="community" element={<CommunityPage />} /> {/* <-- New Route added here */}
         <Route path="profile" element={<ProfilePage />} />
+        <Route path="notifications" element={<NotificationsPage />} />
+       
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />
