@@ -6,6 +6,8 @@ const weatherRoutes = require("./routes/weatherRoutes");
 const cropDoctorRoutes = require("./routes/cropDoctorRoutes");
 const marketRoutes = require("./routes/marketRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
+const profileRoutes = require("./routes/profileRoutes");
+const communityRoutes = require("./routes/communityRoutes");
 
 const app = express();
 
@@ -18,6 +20,8 @@ app.use("/api/weather", weatherRoutes);
 app.use("/api/crop-doctor", cropDoctorRoutes);
 app.use("/api/market-prices", marketRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/profile", profileRoutes);
+app.use("/api/community", communityRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Farmer Super App API running" });

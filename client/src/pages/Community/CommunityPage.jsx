@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { getUser } from "../../utils/auth";
-import PageHeader from "../../components/common/PageHeader"; // <-- New Import added here
+import PageHeader from "../../components/common/PageHeader";
+import {
+  getCommunityPosts,
+  createCommunityPost,
+  deleteCommunityPost,
+} from "../../services/communityService";
 
 function CommunityPage() {
   const currentUser = getUser();
@@ -9,26 +14,32 @@ function CommunityPage() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    const savedPosts = JSON.parse(localStorage.getItem("communityPosts")) || [];
-    setPosts(savedPosts);
+    loadPosts();
   }, []);
 
-  const handlePostSubmit = (e) => {
+  const loadPosts = async () => {
+    const data = await getCommunityPosts();
+    setPosts(data);
+  };
+
+  const handlePostSubmit = async (e) => {
     e.preventDefault();
 
     if (!postText.trim()) return;
 
-    const newPost = {
-      id: Date.now(),
-      author: currentUser?.name || "Farmer User",
-      text: postText,
-      createdAt: new Date().toLocaleString(),
-    };
+    const newPost = await createCommunityPost({
+      author_name: currentUser?.name || "Farmer User",
+      content: postText,
+    });
 
-    const updatedPosts = [newPost, ...posts];
-    setPosts(updatedPosts);
-    localStorage.setItem("communityPosts", JSON.stringify(updatedPosts));
+    setPosts((prev) => [newPost, ...prev]);
     setPostText("");
+  };
+
+  const handleDelete = async (id) => {
+    await deleteCommunityPost(id);
+
+    setPosts((prev) => prev.filter((post) => post.id !== id));
   };
 
   return (
@@ -62,10 +73,13 @@ function CommunityPage() {
               posts.map((post) => (
                 <div key={post.id} className="community-post">
                   <div className="community-post-top">
-                    <strong>{post.author}</strong>
-                    <span>{post.createdAt}</span>
+                    <strong>{post.author_name}</strong>
+                    <span>{new Date(post.created_at).toLocaleString()}</span>
                   </div>
-                  <p>{post.text}</p>
+                  <p>{post.content}</p>
+                  <button onClick={() => handleDelete(post.id)}>
+                    Delete
+                  </button>
                 </div>
               ))
             ) : (
