@@ -56,4 +56,76 @@ router.delete("/:id", async (req, res) => {
   });
 });
 
+// LIKE Post
+router.post("/:id/like", async (req, res) => {
+  const { id } = req.params;
+  const { user_name } = req.body;
+
+  const { data, error } = await supabase
+    .from("community_likes")
+    .insert([
+      {
+        post_id: id,
+        user_name,
+      },
+    ])
+    .select()
+    .single();
+
+  if (error) return res.status(500).json({ message: error.message });
+
+  res.json(data);
+});
+
+// GET Likes Count
+router.get("/:id/likes", async (req, res) => {
+  const { id } = req.params;
+
+  const { count, error } = await supabase
+    .from("community_likes")
+    .select("*", { count: "exact", head: true })
+    .eq("post_id", id);
+
+  if (error) return res.status(500).json({ message: error.message });
+
+  res.json({ count });
+});
+
+// ADD Comment
+router.post("/:id/comments", async (req, res) => {
+  const { id } = req.params;
+  const { user_name, comment } = req.body;
+
+  const { data, error } = await supabase
+    .from("community_comments")
+    .insert([
+      {
+        post_id: id,
+        user_name,
+        comment,
+      },
+    ])
+    .select()
+    .single();
+
+  if (error) return res.status(500).json({ message: error.message });
+
+  res.json(data);
+});
+
+// GET Comments
+router.get("/:id/comments", async (req, res) => {
+  const { id } = req.params;
+
+  const { data, error } = await supabase
+    .from("community_comments")
+    .select("*")
+    .eq("post_id", id)
+    .order("created_at", { ascending: true });
+
+  if (error) return res.status(500).json({ message: error.message });
+
+  res.json(data);
+});
+
 module.exports = router;
