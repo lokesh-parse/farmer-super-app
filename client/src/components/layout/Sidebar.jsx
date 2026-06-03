@@ -14,6 +14,10 @@ function Sidebar() {
         <NavLink to="/app/farm-records">Farm Records</NavLink>
         <NavLink to="/app/market">Market Prices</NavLink>
         <NavLink to="/app/community">Community</NavLink>
+        <NavLink to="/app/profit-calculator">Profit Calculator</NavLink>
+        <NavLink to="/app/government-schemes">Government Schemes</NavLink>
+        <NavLink to="/app/marketplace">Marketplace</NavLink>
+        <NavLink to="/app/admin">Admin</NavLink>
       </nav>
     </aside>
   );

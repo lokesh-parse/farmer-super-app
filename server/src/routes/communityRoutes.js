@@ -56,10 +56,31 @@ router.delete("/:id", async (req, res) => {
   });
 });
 
-// LIKE Post
+// LIKE / UNLIKE Post
 router.post("/:id/like", async (req, res) => {
   const { id } = req.params;
   const { user_name } = req.body;
+
+  const { data: existingLike } = await supabase
+    .from("community_likes")
+    .select("*")
+    .eq("post_id", id)
+    .eq("user_name", user_name)
+    .limit(1);
+
+  if (existingLike && existingLike.length > 0) {
+    const { error } = await supabase
+      .from("community_likes")
+      .delete()
+      .eq("id", existingLike[0].id);
+
+    if (error) return res.status(500).json({ message: error.message });
+
+    return res.json({
+      liked: false,
+      message: "Like removed",
+    });
+  }
 
   const { data, error } = await supabase
     .from("community_likes")
@@ -74,7 +95,10 @@ router.post("/:id/like", async (req, res) => {
 
   if (error) return res.status(500).json({ message: error.message });
 
-  res.json(data);
+  res.json({
+    liked: true,
+    data,
+  });
 });
 
 // GET Likes Count

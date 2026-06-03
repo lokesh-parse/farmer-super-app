@@ -66,11 +66,16 @@ function CommunityPage() {
   };
 
   const handleLike = async (id) => {
-    await likeCommunityPost(id, currentUser?.name || "Farmer User");
+    const result = await likeCommunityPost(
+      id,
+      currentUser?.name || "Farmer User"
+    );
 
     setLikes((prev) => ({
       ...prev,
-      [id]: (prev[id] || 0) + 1,
+      [id]: result.liked
+        ? (prev[id] || 0) + 1
+        : Math.max((prev[id] || 0) - 1, 0),
     }));
   };
 

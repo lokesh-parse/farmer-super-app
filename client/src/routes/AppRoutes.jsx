@@ -13,6 +13,10 @@ import NotFoundPage from "../pages/NotFound/NotFoundPage";
 import AppLayout from "../components/layout/AppLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import NotificationsPage from "../pages/Notifications/NotificationsPage";
+import ProfitCalculatorPage from "../pages/ProfitCalculator/ProfitCalculatorPage";
+import GovernmentSchemesPage from "../pages/GovernmentSchemes/GovernmentSchemesPage";
+import MarketplacePage from "../pages/Marketplace/MarketplacePage";
+import AdminPage from "../pages/Admin/AdminPage";
 
 
 function AppRoutes() {
@@ -38,6 +42,10 @@ function AppRoutes() {
         <Route path="community" element={<CommunityPage />} /> {/* <-- New Route added here */}
         <Route path="profile" element={<ProfilePage />} />
         <Route path="notifications" element={<NotificationsPage />} />
+        <Route path="profit-calculator" element={<ProfitCalculatorPage />} />
+        <Route path="government-schemes"element={<GovernmentSchemesPage />}/>
+        <Route path="marketplace" element={<MarketplacePage />}/>
+        <Route path="admin" element={<AdminPage />} />
        
       </Route>
 

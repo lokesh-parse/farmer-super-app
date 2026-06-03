@@ -8,6 +8,8 @@ const marketRoutes = require("./routes/marketRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const communityRoutes = require("./routes/communityRoutes");
+const marketplaceRoutes = require("./routes/marketplaceRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 
@@ -22,6 +24,8 @@ app.use("/api/market-prices", marketRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/community", communityRoutes);
+app.use("/api/marketplace", marketplaceRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Farmer Super App API running" });

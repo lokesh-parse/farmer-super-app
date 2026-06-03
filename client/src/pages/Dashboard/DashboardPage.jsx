@@ -12,8 +12,10 @@ import {
   removeNotification,
 } from "../../utils/notifications";
 
-// Step 1: Farm service import
+// Step 1: Services import
 import { getFarmRecords } from "../../services/farmService";
+import { getCommunityPosts } from "../../services/communityService";
+import { getProfile } from "../../services/profileService";
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -24,8 +26,10 @@ function DashboardPage() {
 
   const [notifications, setNotifications] = useState([]);
   
-  // Step 2: Component ke andar state add
+  // Step 2: States add
   const [farmRecords, setFarmRecords] = useState([]);
+  const [communityPosts, setCommunityPosts] = useState([]);
+  const [profile, setProfile] = useState({});
 
   useEffect(() => {
     const saved = getNotifications();
@@ -56,22 +60,25 @@ function DashboardPage() {
     }
   }, []);
 
-  // Step 3: useEffect add kiya for fetching records
+  // Step 3: Data load
   useEffect(() => {
-    async function loadFarmRecords() {
-      const data = await getFarmRecords();
-      setFarmRecords(data);
+    async function loadDashboardData() {
+      const farmData = await getFarmRecords();
+      const communityData = await getCommunityPosts();
+      const profileData = await getProfile();
+
+      setFarmRecords(farmData);
+      setCommunityPosts(communityData);
+      setProfile(profileData);
     }
 
-    loadFarmRecords();
+    loadDashboardData();
   }, []);
 
   const handleRemove = (id) => {
     removeNotification(id);
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   };
-
-  const communityPosts = JSON.parse(localStorage.getItem("communityPosts")) || [];
 
   const totalActivities = history.length;
   const chatCount = history.filter((item) => item.type === "AI Chat").length;
@@ -81,17 +88,15 @@ function DashboardPage() {
   const lastActivity = history[0];
   const recentHistory = history.slice(0, 4);
 
-  // Step 4: Stats calculate kiye gaye
-  const totalFarmRecords = farmRecords.length;
-
-  const totalFarmExpense = farmRecords.reduce(
+  // Step 4: Stats calculation
+  const totalExpense = farmRecords.reduce(
     (sum, record) => sum + Number(record.expense || 0),
     0
   );
 
   const topCrop =
-    farmRecords.length > 0
-      ? farmRecords[0].crop_name || farmRecords[0].cropName
+    farmRecords.length > 0 
+      ? farmRecords[0].crop_name || farmRecords[0].cropName 
       : "N/A";
 
   return (
@@ -140,12 +145,12 @@ function DashboardPage() {
         <StatCard title="Weather Checks" value={weatherCount} />
         <StatCard title="Crop Scans" value={cropCount} />
         
-        {/* Step 5: Dashboard cards added here */}
-        <StatCard title="Farm Records" value={totalFarmRecords} />
-        <StatCard title="Farm Expense" value={`₹ ${totalFarmExpense}`} />
-        <StatCard title="Top Crop" value={topCrop} />
-        
+        {/* Step 5: Cards add */}
+        <StatCard title="Farm Records" value={farmRecords.length} />
         <StatCard title="Community Posts" value={communityPosts.length} />
+        <StatCard title="Total Expense" value={`₹${totalExpense}`} />
+        <StatCard title="Top Crop" value={topCrop} />
+        <StatCard title="Village" value={profile.village || "Not set"} />
       </div>
 
       <div className="dashboard-bottom-grid">
