@@ -1707,3 +1707,22 @@ a {
   color: #166534;
   margin-top: 10px;
 }
+.recommendation-card {
+  background: white;
+  padding: 22px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  margin-top: 20px;
+}
+
+.recommendation-item {
+  background: #f0fdf4;
+  padding: 14px;
+  border-radius: 14px;
+  margin-top: 12px;
+}
+
+.recommendation-item h3 {
+  color: #166534;
+  margin-bottom: 6px;
+}

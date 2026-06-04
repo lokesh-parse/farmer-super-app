@@ -16,6 +16,7 @@ import {
 import { getFarmRecords } from "../../services/farmService";
 import { getCommunityPosts } from "../../services/communityService";
 import { getProfile } from "../../services/profileService";
+import { getRecommendations } from "../../services/recommendationService";
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ function DashboardPage() {
   const [farmRecords, setFarmRecords] = useState([]);
   const [communityPosts, setCommunityPosts] = useState([]);
   const [profile, setProfile] = useState({});
+  const [recommendations, setRecommendations] = useState([]);
 
   useEffect(() => {
     const saved = getNotifications();
@@ -66,10 +68,12 @@ function DashboardPage() {
       const farmData = await getFarmRecords();
       const communityData = await getCommunityPosts();
       const profileData = await getProfile();
+      const recommendationData = await getRecommendations();
 
       setFarmRecords(farmData);
       setCommunityPosts(communityData);
       setProfile(profileData);
+      setRecommendations(recommendationData);
     }
 
     loadDashboardData();
@@ -152,6 +156,16 @@ function DashboardPage() {
         <StatCard title="Top Crop" value={topCrop} />
         <StatCard title="Village" value={profile.village || "Not set"} />
       </div>
+      <div className="recommendation-card">
+  <h2>Smart Recommendations</h2>
+
+  {recommendations.map((item) => (
+    <div key={item.id} className="recommendation-item">
+      <h3>{item.title}</h3>
+      <p>{item.recommendation}</p>
+    </div>
+  ))}
+</div>
 
       <div className="dashboard-bottom-grid">
         <SectionCard title="Last Activity">
