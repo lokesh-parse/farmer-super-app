@@ -17,6 +17,7 @@ import ProfitCalculatorPage from "../pages/ProfitCalculator/ProfitCalculatorPage
 import GovernmentSchemesPage from "../pages/GovernmentSchemes/GovernmentSchemesPage";
 import MarketplacePage from "../pages/Marketplace/MarketplacePage";
 import AdminPage from "../pages/Admin/AdminPage";
+import CropAdvisoryPage from "../pages/CropAdvisory/CropAdvisoryPage";
 
 
 function AppRoutes() {
@@ -46,6 +47,7 @@ function AppRoutes() {
         <Route path="government-schemes"element={<GovernmentSchemesPage />}/>
         <Route path="marketplace" element={<MarketplacePage />}/>
         <Route path="admin" element={<AdminPage />} />
+        <Route path="crop-advisory" element={<CropAdvisoryPage />} />
        
       </Route>
 

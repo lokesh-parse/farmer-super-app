@@ -1726,3 +1726,52 @@ a {
   color: #166534;
   margin-bottom: 6px;
 }
+.advisory-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.advisory-card {
+  background: white;
+  padding: 24px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.advisory-form {
+  display: grid;
+  gap: 14px;
+}
+
+.advisory-form input,
+.advisory-form textarea {
+  padding: 14px;
+  border: 1px solid #d7dbe0;
+  border-radius: 12px;
+}
+
+.advisory-form textarea {
+  min-height: 130px;
+}
+
+.advisory-form button {
+  background: #166534;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.advisory-result h3 {
+  margin-top: 16px;
+  color: #166534;
+}
+.advisory-note {
+  margin-top: 16px;
+  background: #fff7ed;
+  padding: 12px;
+  border-left: 4px solid #f97316;
+  border-radius: 10px;
+}
