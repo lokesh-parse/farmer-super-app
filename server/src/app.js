@@ -12,6 +12,8 @@ const marketplaceRoutes = require("./routes/marketplaceRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const recommendationRoutes = require("./routes/recommendationRoutes");
 const cropAdvisoryRoutes = require("./routes/cropAdvisoryRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
+const chatRoutes = require("./routes/chatRoutes");
 
 const app = express();
 
@@ -30,7 +32,8 @@ app.use("/api/marketplace", marketplaceRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/recommendations", recommendationRoutes);
 app.use("/api/crop-advisory", cropAdvisoryRoutes);
-
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/chat", chatRoutes);
 app.get("/", (req, res) => {
   res.json({ message: "Farmer Super App API running" });
 });

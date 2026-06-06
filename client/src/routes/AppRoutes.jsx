@@ -18,6 +18,17 @@ import GovernmentSchemesPage from "../pages/GovernmentSchemes/GovernmentSchemesP
 import MarketplacePage from "../pages/Marketplace/MarketplacePage";
 import AdminPage from "../pages/Admin/AdminPage";
 import CropAdvisoryPage from "../pages/CropAdvisory/CropAdvisoryPage";
+import LearningHubPage from "../pages/LearningHub/LearningHubPage";
+import BeginnerFarmingPage from "../pages/LearningHub/Guides/BeginnerFarmingPage";
+import CropKnowledgePage from "../pages/LearningHub/Guides/CropKnowledgePage";
+import ModernFarmingPage from "../pages/LearningHub/Guides/ModernFarmingPage";
+import TerraceFarmingPage from "../pages/LearningHub/Guides/TerraceFarmingPage";
+import FishFarmingPage from "../pages/LearningHub/Guides/FishFarmingPage";
+import PoultryFarmingPage from "../pages/LearningHub/Guides/PoultryFarmingPage";
+import DairyFarmingPage from "../pages/LearningHub/Guides/DairyFarmingPage";
+import OrganicFarmingPage from "../pages/LearningHub/Guides/OrganicFarmingPage";
+import ProfitFarmingPage from "../pages/LearningHub/Guides/ProfitFarmingPage";
+import YoutubeLearningPage from "../pages/LearningHub/Guides/YoutubeLearningPage";
 
 
 function AppRoutes() {
@@ -48,7 +59,21 @@ function AppRoutes() {
         <Route path="marketplace" element={<MarketplacePage />}/>
         <Route path="admin" element={<AdminPage />} />
         <Route path="crop-advisory" element={<CropAdvisoryPage />} />
-       
+        <Route path="learning-hub" element={<LearningHubPage />} />
+        //learning hub inside 
+        <Route path="learning-hub/beginner-farming" element={<BeginnerFarmingPage />}/>
+       <Route path="learning-hub/crop-knowledge" element={<CropKnowledgePage />}/>
+       <Route path="learning-hub/modern-farming" element={<ModernFarmingPage />}/>
+       <Route path="learning-hub/terrace-farming" element={<TerraceFarmingPage />}/>
+       <Route path="learning-hub/fish-farming" element={<FishFarmingPage />}/>
+       <Route path="learning-hub/poultry-farming" element={<PoultryFarmingPage />}/>
+       <Route path="learning-hub/dairy-farming" element={<DairyFarmingPage />} />
+       <Route path="learning-hub/organic-farming" element={<OrganicFarmingPage />}/>
+       <Route path="learning-hub/profit-farming" element={<ProfitFarmingPage />}/><Route path="learning-hub/youtube-learning" element={<YoutubeLearningPage />}/>
+
+
+
+
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />

@@ -17,6 +17,7 @@ import { getFarmRecords } from "../../services/farmService";
 import { getCommunityPosts } from "../../services/communityService";
 import { getProfile } from "../../services/profileService";
 import { getRecommendations } from "../../services/recommendationService";
+import { getDashboardStats } from "../../services/dashboardService"; // Added
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -32,6 +33,15 @@ function DashboardPage() {
   const [communityPosts, setCommunityPosts] = useState([]);
   const [profile, setProfile] = useState({});
   const [recommendations, setRecommendations] = useState([]);
+  
+  // Added Dashboard Stats State
+  const [dashboardStats, setDashboardStats] = useState({
+    farmers: 0,
+    farmRecords: 0,
+    communityPosts: 0,
+    marketplaceItems: 0,
+    recommendations: 0,
+  });
 
   useEffect(() => {
     const saved = getNotifications();
@@ -69,11 +79,13 @@ function DashboardPage() {
       const communityData = await getCommunityPosts();
       const profileData = await getProfile();
       const recommendationData = await getRecommendations();
+      const statsData = await getDashboardStats(); // Added
 
       setFarmRecords(farmData);
       setCommunityPosts(communityData);
       setProfile(profileData);
       setRecommendations(recommendationData);
+      setDashboardStats(statsData); // Added
     }
 
     loadDashboardData();
@@ -93,14 +105,14 @@ function DashboardPage() {
   const recentHistory = history.slice(0, 4);
 
   // Step 4: Stats calculation
-  const totalExpense = farmRecords.reduce(
-    (sum, record) => sum + Number(record.expense || 0),
-    0
-  );
+  const totalExpense = farmRecords.reduce((sum, record) => {
+    const expense = Number(record.expense);
+    return sum + (isNaN(expense) ? 0 : expense);
+  }, 0);
 
   const topCrop =
-    farmRecords.length > 0 
-      ? farmRecords[0].crop_name || farmRecords[0].cropName 
+    farmRecords.length > 0
+      ? farmRecords[0].crop_name || "N/A"
       : "N/A";
 
   return (
@@ -149,23 +161,29 @@ function DashboardPage() {
         <StatCard title="Weather Checks" value={weatherCount} />
         <StatCard title="Crop Scans" value={cropCount} />
         
-        {/* Step 5: Cards add */}
-        <StatCard title="Farm Records" value={farmRecords.length} />
-        <StatCard title="Community Posts" value={communityPosts.length} />
+        {/* Step 5: Cards add (Updated with dashboardStats) */}
+        <StatCard title="Farmers" value={dashboardStats.farmers} />
+        <StatCard title="Farm Records" value={dashboardStats.farmRecords} />
+        <StatCard title="Community Posts" value={dashboardStats.communityPosts} />
+        <StatCard title="Marketplace Items" value={dashboardStats.marketplaceItems} />
+        <StatCard title="Recommendations" value={dashboardStats.recommendations} />
+        
+        {/* Preserved old metrics that didn't overlap */}
         <StatCard title="Total Expense" value={`₹${totalExpense}`} />
         <StatCard title="Top Crop" value={topCrop} />
         <StatCard title="Village" value={profile.village || "Not set"} />
       </div>
+      
       <div className="recommendation-card">
-  <h2>Smart Recommendations</h2>
+        <h2>Smart Recommendations</h2>
 
-  {recommendations.map((item) => (
-    <div key={item.id} className="recommendation-item">
-      <h3>{item.title}</h3>
-      <p>{item.recommendation}</p>
-    </div>
-  ))}
-</div>
+        {recommendations.map((item) => (
+          <div key={item.id} className="recommendation-item">
+            <h3>{item.title}</h3>
+            <p>{item.recommendation}</p>
+          </div>
+        ))}
+      </div>
 
       <div className="dashboard-bottom-grid">
         <SectionCard title="Last Activity">

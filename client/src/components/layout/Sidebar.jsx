@@ -19,6 +19,7 @@ function Sidebar() {
         <NavLink to="/app/marketplace">Marketplace</NavLink>
         <NavLink to="/app/admin">Admin</NavLink>
         <NavLink to="/app/crop-advisory">Crop Advisory</NavLink>
+         <NavLink to="/app/learning-hub">Learning Hub</NavLink>
       </nav>
     </aside>
   );
